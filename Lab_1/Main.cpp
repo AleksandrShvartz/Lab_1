@@ -1,7 +1,7 @@
 #include <string>  
-#include "vld.h"
+#include "vld.h"		 //проверка на утечки
 template<typename T>
-class LinkedListStack
+class LinkedListStack			    //реализация стека через связный список
 {
 	T data;
 	LinkedListStack* next;
@@ -28,7 +28,7 @@ public:
 	}
 };
 template<typename T>
-class ArrayStack
+class ArrayStack 					//реализация стека через массив
 {
 	T* data;
 	size_t amount;
@@ -57,13 +57,16 @@ public:
 	}
 	T pop() {
 		if(amount>0)
-		return data[amount--];
+		return data[-1+amount--];
 		
 	}
 	void clean() {
 		delete[] data;
 	}
 };
+
+//--------------------------------тесты------------------------------------------------------
+
 LinkedListStack<int>* constructor_createEmptyLinkedListStackOfInt_returnVoid() {
 	return new LinkedListStack<int>();
 }
@@ -86,14 +89,13 @@ ArrayStack<int>* constructor_createEmptyArrayStackOfInt_returnVoid() {
 	return new ArrayStack<int>();
 }
 void push_pushIntsToArrayStack_returnVoid(ArrayStack<int>* stack) {
-	stack->push(1);
-	stack->push(2);
-	stack->push(3);
+	for (int i = 0; i != 11; ++i)
+		stack->push(i);
 
 }
 void pop_popIntsToArrayStack_returnInt(ArrayStack<int>* stack) {
-	stack->pop();		//return 3
-	stack->pop();		//return 2
+	stack->pop();		//return 10
+	stack->pop();		//return 9
 }
 void clean_cleanArrayStack_returnVoid(ArrayStack<int>* stack) {
 	stack->clean();
@@ -214,3 +216,9 @@ int main() {
 	}
 	return 0;
 }
+// К минусам реализации стека через связный список можно отнести большую, по сравнении с реализации через
+//массив, вероятность фрагментации памяти(так как на каждый элемент память выделяеться отдельно), необходимость
+//хранить дополнительные данные, количество которых зависит от количества элементов в стеке. Однако, при
+// реализации через массив при превышении некоторого количества элементов приходится создавать новый массив 
+// большего объема и копировать все элементы, уже находящиеся в стеке, что является потенциально длительной 
+// операцией, и соответсвенно большим минусом. 
